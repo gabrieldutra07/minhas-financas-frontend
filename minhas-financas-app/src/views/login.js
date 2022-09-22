@@ -34,7 +34,7 @@ class Login extends React.Component {
                                             </FormGroup>
                                             <FormGroup label="Senha: *" htmlFor="exampleInputPassword1">
                                                 <input onChange={(e) => this.setState({senha: e.target.value})} value={this.state.senha} type="password" className="form-control" id="exampleInputPassword1" placeholder="Password"/>
-                                            </FormGroup>
+                                            </FormGroup><br/>
                                             <button onClick={this.entrar} className='btn btn-success'>Entrar</button>
                                             <button onClick={this.prepareCadastrar} className='btn btn-danger'>Cadastrar</button>
                                         </fieldset>
