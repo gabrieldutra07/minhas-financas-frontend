@@ -2,7 +2,7 @@ import React from 'react'
 import Card from '../components/card'
 import FormGroup from '../components/form-group'
 import {withRouter} from 'react-router-dom'
-import axios from 'axios'
+import UsuarioService from '../app/service/usuarioService'
 
 class Login extends React.Component {
 
@@ -12,17 +12,21 @@ class Login extends React.Component {
         mensagemErro: null
     }
 
-    entrar = async () => {
-        axios
-            .post('http://localhost:8080/api/usuarios/autenticar', {
-                email: this.state.email,
-                senha: this.state.senha
-            }).then(res => {
-                localStorage.setItem('_usuario_logado', JSON.stringify(res.data))
-                this.props.history.push('/home')
-            }).catch(err => {
-                this.setState({mensagemErro: err.response.data})
-            })
+    constructor() {
+        super()
+        this.service = new UsuarioService()
+    }
+
+    entrar = () => {
+        this.service.autenticar({
+            email: this.state.email,
+            senha: this.state.senha
+        }).then(res => {
+            localStorage.setItem('_usuario_logado', JSON.stringify(res.data))
+            this.props.history.push('/home')
+        }).catch(err => {
+            this.setState({mensagemErro: err.response.data})
+        })
     }   
 
     prepareCadastrar = () => {
