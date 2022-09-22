@@ -2,6 +2,7 @@ import React from 'react'
 import Card from '../components/card'
 import FormGroup from '../components/form-group'
 import {withRouter} from 'react-router-dom'
+import axios from 'axios'
 
 class Login extends React.Component {
 
@@ -11,7 +12,15 @@ class Login extends React.Component {
     }
 
     entrar = () => {
-        
+        axios
+        .post('http://localhost:8080/api/usuarios/autenticar', {
+            email: this.state.email,
+            senha: this.state.senha
+        }).then(res => {
+            console.log(res)
+        }).catch(err => {
+            console.log(err.response)
+        })
     }
 
     prepareCadastrar = () => {
@@ -27,7 +36,7 @@ class Login extends React.Component {
                         <Card title="Login">
                             <div className="row">
                                 <div className='col-lg-12'>
-                                    <div class="bs-component">
+                                    <div className="bs-component">
                                         <fieldset>
                                             <FormGroup label="Email: *" htmlFor="exampleInputEmail1">
                                                 <input type="email" onChange={(e) => this.setState({email: e.target.value})} value={this.state.email} className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Digite o Email"/>
