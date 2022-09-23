@@ -5,8 +5,8 @@ class LocalStorageService {
     }
 
     static obterItem(key) {
-        const item = localStorage.getItem(JSON.parse(key))
-        return item
+        const item = localStorage.getItem(key)
+        return JSON.parse(item)
     }
 
 }
