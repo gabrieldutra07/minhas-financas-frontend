@@ -4,7 +4,7 @@ export default props => {
 
     const rows = props.lancamentos.map(lancamento => {
         return (
-            <tr>
+            <tr key={lancamento.id}>
                 <td>{lancamento.descricao}</td>
                 <td>{lancamento.valor}</td>
                 <td>{lancamento.tipo}</td>
