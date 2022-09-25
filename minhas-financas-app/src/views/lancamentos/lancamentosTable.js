@@ -1,4 +1,5 @@
 import React from 'react'
+import formatter from 'currency-formatter'
 
 export default props => {
 
@@ -6,7 +7,7 @@ export default props => {
         return (
             <tr key={lancamento.id}>
                 <td>{lancamento.descricao}</td>
-                <td>{lancamento.valor}</td>
+                <td>{formatter.format(lancamento.valor, {locale: 'pt-BR'})}</td>
                 <td>{lancamento.tipo}</td>
                 <td>{lancamento.mes}</td>
                 <td>{lancamento.status}</td>
