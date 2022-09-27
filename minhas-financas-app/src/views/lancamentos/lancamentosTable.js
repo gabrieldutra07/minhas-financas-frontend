@@ -15,7 +15,7 @@ export default props => {
                     <button type='button' className='btn btn-success' 
                             onClick={e => props.editAction(lancamento.id)}>Editar</button>
                     <button type='button' className='btn btn-danger'
-                            onClick={e => props.deleteAction(lancamento)}>Deletar</button>
+                            onClick={e => props.deleteAction(lancamento)}>Excluir</button>
                 </td>
             </tr>
         )

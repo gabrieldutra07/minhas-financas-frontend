@@ -57,7 +57,7 @@ class ConsultaLancamentos extends React.Component {
     }
 
     cancelarDelecao = () => {
-        this.setState({showConfirmDialog: false})
+        this.setState({showConfirmDialog: false, lancamentoDeletar: {}})
     }
 
     abrirConfirmacao = (lancamento) => {
@@ -65,15 +65,15 @@ class ConsultaLancamentos extends React.Component {
     }
 
     deletar = () => {
-        this.service.deletar(this.lancamentoDeletar.id)
+        this.service.deletar(this.state.lancamentoDeletar.id)
                     .then(res => {
-                        const lancamentos = this.lancamento
-                        const index = lancamentos.indexOf(this.lancamentoDeletar)
+                        const lancamentos = this.state.lancamentos
+                        const index = lancamentos.indexOf(this.state.lancamentoDeletar)
                         lancamentos.splice(index, 1)
-                        this.setState(lancamentos)
+                        this.setState({lancamentos: lancamentos, showConfirmDialog: false})
                         message.mensagemSucesso("Lançamento excluído com sucesso!")
                     }).catch(err => {
-                        message.mensagemErro("Ocorreu um erro! Erro: ", err)
+                        message.mensagemErro("Ocorreu um erro!")
                     })
     }
     
@@ -83,10 +83,12 @@ class ConsultaLancamentos extends React.Component {
         const tipos = this.service.obterTipos()
 
         const confirmDialogFooter = () => {
-                <div>
-                    <Button label="Confirmar" onClick={this.deletar} className="p-button-text" />
-                    <Button label="Cancelar" icon="pi pi-check" onClick={this.cancelarDelecao}/>
-                </div>
+               return (
+                    <div>
+                        <Button label="Confirmar" icon="pi pi-check" onClick={this.deletar}  />
+                        <Button label="Cancelar" className="p-button-text" onClick={this.cancelarDelecao}/>
+                    </div>
+                )
         }
 
         return (
@@ -125,13 +127,19 @@ class ConsultaLancamentos extends React.Component {
                 <div className='row'>
                     <div className='col-md-12'>
                         <div class="bs-component">
-                            <LancamentosTable lancamentos={this.state.lancamentos} deleteAction={this.abrirConfirmacao} editAction={this.editar}/>
+                            <LancamentosTable lancamentos={this.state.lancamentos} 
+                            deleteAction={this.abrirConfirmacao} 
+                            editAction={this.editar}/>
                         </div>
                     </div>
                 </div>
             <div>
-                <Dialog header="Header" visible={this.state.showConfirmDialog} 
-                        footer={confirmDialogFooter} style={{ width: '50vw' }} modal={true} onHide={() => this.setState({showConfirmDialog:false})}>
+                <Dialog header="Confirmação de exclusão" 
+                        visible={this.state.showConfirmDialog} 
+                        footer={confirmDialogFooter} 
+                        style={{ width: '50vw' }} 
+                        modal={true} 
+                        onHide={() => this.setState({showConfirmDialog:false})}>
                     <p>Você tem certeza que deseja excluir esse lançamento?</p>
                 </Dialog>
             </div>
