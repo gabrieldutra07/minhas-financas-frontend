@@ -56,6 +56,10 @@ class ConsultaLancamentos extends React.Component {
         
     }
 
+    prepareCadastrarLancamento = () => {
+        this.props.history.push('/cadastro-lancamentos')
+    }
+
     cancelarDelecao = () => {
         this.setState({showConfirmDialog: false, lancamentoDeletar: {}})
     }
@@ -120,7 +124,7 @@ class ConsultaLancamentos extends React.Component {
                                 value={this.state.tipo} onChange={e => this.setState({tipo: e.target.value})}/>
                             </FormGroup><br/>
                             <button type='button' className='btn btn-success' onClick={this.buscar}>Buscar</button>
-                            <button type='button' className='btn btn-danger'>Cadastrar</button>
+                            <button type='button' className='btn btn-danger' onClick={this.prepareCadastrarLancamento}>Cadastrar</button>
                         </div>
                     </div>
                 </div><br/>
