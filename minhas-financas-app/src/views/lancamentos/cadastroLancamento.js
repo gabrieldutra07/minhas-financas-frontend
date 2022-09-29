@@ -15,7 +15,8 @@ class CadastroLancamentos extends React.Component {
         tipo: '', 
         status: '', 
         mes: '',
-        valor: ''
+        valor: '',
+        usuario: null
     }
 
     constructor() {
@@ -28,6 +29,20 @@ class CadastroLancamentos extends React.Component {
         const name = e.target.name
 
         this.setState({ [name]: value })
+    }
+
+    componentDidMount() {
+        console.log('entrou no did')
+        const params = this.props.match.params
+        if(params.id) {
+            console.log('entrou no params')
+            this.service.obterPorId(params.id)
+                .then(res => {
+                    this.setState( {...res.data} )
+                }).catch(err => {
+                    console.log(err)
+                })
+        }
     }
 
     submit = () => {
