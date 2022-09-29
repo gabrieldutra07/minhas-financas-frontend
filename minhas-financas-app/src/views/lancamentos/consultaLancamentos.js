@@ -56,6 +56,25 @@ class ConsultaLancamentos extends React.Component {
         this.props.history.push(`/cadastro-lancamentos/${id}`)
     }
 
+    alterarStatus = (lancamento, status) => {
+        this.service.atualizarStatus(lancamento.id, status)
+                    .then(res => {
+                        const lancamentos = this.state.lancamentos
+                        const index = lancamentos.indexOf(lancamento)
+
+                        if(index !== -1) {
+                            lancamento['status'] = status
+                            lancamentos[index] = lancamento
+                            this.setState({ lancamento })
+                        }
+
+                        message.mensagemSucesso("Status atualizado com sucesso!")
+                    }).catch(err =>  {
+                        
+                    })
+        }
+    
+
     prepareCadastrarLancamento = () => {
         this.props.history.push('/cadastro-lancamentos')
     }
@@ -123,8 +142,10 @@ class ConsultaLancamentos extends React.Component {
                                 <SelectMenu className="form-control" lista={tipos}
                                 value={this.state.tipo} onChange={e => this.setState({tipo: e.target.value})}/>
                             </FormGroup><br/>
-                            <button type='button' className='btn btn-success' onClick={this.buscar}>Buscar</button>
-                            <button type='button' className='btn btn-danger' onClick={this.prepareCadastrarLancamento}>Cadastrar</button>
+                            <button type='button' className='btn btn-success' onClick={this.buscar}>
+                                <i className='pi pi-search'></i>    Buscar</button>
+                            <button type='button' className='btn btn-danger' onClick={this.prepareCadastrarLancamento}>
+                            <i className='pi pi-plus'></i> Cadastrar</button>
                         </div>
                     </div>
                 </div><br/>
@@ -133,7 +154,9 @@ class ConsultaLancamentos extends React.Component {
                         <div class="bs-component">
                             <LancamentosTable lancamentos={this.state.lancamentos} 
                             deleteAction={this.abrirConfirmacao} 
-                            editAction={this.editar}/>
+                            editAction={this.editar}
+                            alterarStatus={this.alterarStatus}/>
+                            
                         </div>
                     </div>
                 </div>

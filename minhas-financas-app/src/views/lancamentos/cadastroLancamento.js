@@ -16,7 +16,8 @@ class CadastroLancamentos extends React.Component {
         status: '', 
         mes: '',
         valor: '',
-        usuario: null
+        usuario: null,
+        atualizando: false
     }
 
     constructor() {
@@ -32,13 +33,11 @@ class CadastroLancamentos extends React.Component {
     }
 
     componentDidMount() {
-        console.log('entrou no did')
         const params = this.props.match.params
         if(params.id) {
-            console.log('entrou no params')
             this.service.obterPorId(params.id)
                 .then(res => {
-                    this.setState( {...res.data} )
+                    this.setState( {...res.data, atualizando: true} )
                 }).catch(err => {
                     console.log(err)
                 })
@@ -52,10 +51,32 @@ class CadastroLancamentos extends React.Component {
         const { descricao, valor, mes, ano, tipo } = this.state
         const lancamento = { descricao, valor, mes, ano, tipo, usuario: usuarioLogado.id }
 
+        try {
+            this.service.validar(lancamento)
+        } catch(err) {
+            const mensagens  = err.mensagens
+            mensagens.forEach(msg => messages.mensagemErro(msg))
+            return false
+        }
+
         this.service.salvar(lancamento)
         .then(res => {
             this.props.history.push('/consulta-lancamentos')
             messages.mensagemSucesso("Lançamento cadastrado com sucesso!")
+        }).catch(err => {
+            messages.mensagemErro(err.response.data)
+        })
+    }
+
+    atualizar = () => {
+
+        const { descricao, valor, mes, ano, tipo, status, usuario, id } = this.state
+        const lancamento = { descricao, valor, mes, ano, tipo, id, status, usuario }
+
+        this.service.atualizar(lancamento)
+        .then(res => {
+            this.props.history.push('/consulta-lancamentos')
+            messages.mensagemSucesso("Lançamento atualizado com sucesso!")
         }).catch(err => {
             messages.mensagemErro(err.response.data)
         })
@@ -67,7 +88,7 @@ class CadastroLancamentos extends React.Component {
         const meses = this.service.obterListaMeses()
 
         return (
-            <Card title="Cadastro de lançamentos">
+            <Card title={this.state.atualizando ? 'Edição de lançamento' : 'Cadastro de lançamento'}>
                 <div className='row'>
                     <div className='col-md-12'>
                         <FormGroup id='inputDescricao' label='Descrição: *'>
@@ -105,7 +126,14 @@ class CadastroLancamentos extends React.Component {
                     </div><br/>
                     <div className='row'>
                         <div className='col-md-4'><br/>
-                            <button onClick={this.submit} className='btn btn-success'>Salvar</button>
+                            {this.state.atualizando ?
+                                (
+                                     <button onClick={this.atualizar} className='btn btn-primary'>Atualizar</button>
+                                )
+                             : (
+                                    <button onClick={this.submit} className='btn btn-success'>Salvar</button>
+                                )
+                            }
                             <button className='btn btn-danger' onClick={e => this.props.history.push('/consulta-lancamentos')}>Cancelar</button>
                         </div>
                     </div>

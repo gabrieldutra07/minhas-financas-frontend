@@ -1,4 +1,5 @@
 import ApiService from "./apiservice"
+import ErroValidacao from "./exception/erroValidacao"
 
 export default class LancamentoService extends ApiService {
 
@@ -32,12 +33,49 @@ export default class LancamentoService extends ApiService {
         ]
     }
 
+    validar(lancamento) {
+        const errors = []
+
+        if(!lancamento.ano) {
+            errors.push("Informe o ano.")
+        }
+
+        if(!lancamento.mes) {
+            errors.push("Informe o mês.")
+        }
+
+        if(!lancamento.descricao) {
+            errors.push("Informe o descrição.")
+        }
+
+        if(!lancamento.valor) {
+            errors.push("Informe o valor.")
+        }
+
+        if(!lancamento.tipo) {
+            errors.push("Informe o tipo.")
+        }
+
+        if(errors && errors.length > 0) {
+            throw new ErroValidacao(errors)
+        }
+
+    }
+
     obterPorId(id) {
         return this.get(`/${id}`)
     }
 
     salvar(lancamento) {
         return this.post('/', lancamento)
+    }
+
+    atualizar(lancamento) {
+        return this.put(`/${lancamento.id}`, lancamento)
+    }
+
+    atualizarStatus(id, status)  {
+        return this.put(`/${id}/atualiza-status`, {status})
     }
 
     consultar(lancamentoFiltro) {
