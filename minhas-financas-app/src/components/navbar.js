@@ -6,6 +6,10 @@ const logout = () => {
     AuthService.removeAuthUser()
 }
 
+const isAuthUser = () => {
+    return AuthService.isAuth()
+}
+
 function Navbar () {
 
     return (
@@ -17,10 +21,10 @@ function Navbar () {
             </button>
         <div className="collapse navbar-collapse" id="navbarResponsive">
             <ul className="navbar-nav">
-                <NavbarItem href="#/home" label="Home"/>
-                <NavbarItem href="#/cadastro-usuarios" label="Usuários"/>
-                <NavbarItem href="#/consulta-lancamentos" label="Lançamentos"/>
-                <NavbarItem onClick={logout} href="#/login" label="Sair"/>
+                <NavbarItem render={isAuthUser()} href="#/home" label="Home"/>
+                <NavbarItem render={isAuthUser()} href="#/cadastro-usuarios" label="Usuários"/>
+                <NavbarItem render={isAuthUser()} href="#/consulta-lancamentos" label="Lançamentos"/>
+                <NavbarItem render={isAuthUser()} onClick={logout} href="#/login" label="Sair"/>
             </ul>
         </div>
       </div>
