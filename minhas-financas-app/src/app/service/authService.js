@@ -1,4 +1,5 @@
 import LocalStorageService from "./localStorageService"
+import UsuarioService from "./usuarioService"
 
 export const USUARIO_LOGADO = '_usuario_logado'
 
