@@ -1,16 +1,10 @@
 import React from 'react'
 import NavbarItem from './navbarItem'
 import AuthService from '../app/service/authService'
+import {AuthConsumer} from '../main/provedorAutenticacao'
 
-const logout = () => {
-    AuthService.removeAuthUser()
-}
 
-const isAuthUser = () => {
-    return AuthService.isAuth()
-}
-
-function Navbar () {
+function Navbar (props) {
 
     return (
         <div className="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
@@ -21,10 +15,10 @@ function Navbar () {
             </button>
         <div className="collapse navbar-collapse" id="navbarResponsive">
             <ul className="navbar-nav">
-                <NavbarItem render={isAuthUser()} href="#/home" label="Home"/>
-                <NavbarItem render={isAuthUser()} href="#/cadastro-usuarios" label="Usuários"/>
-                <NavbarItem render={isAuthUser()} href="#/consulta-lancamentos" label="Lançamentos"/>
-                <NavbarItem render={isAuthUser()} onClick={logout} href="#/login" label="Sair"/>
+                <NavbarItem render={props.isUsuarioAutenticado} href="#/home" label="Home"/>
+                <NavbarItem render={props.isUsuarioAutenticado} href="#/cadastro-usuarios" label="Usuários"/>
+                <NavbarItem render={props.isUsuarioAutenticado} href="#/consulta-lancamentos" label="Lançamentos"/>
+                <NavbarItem render={props.isUsuarioAutenticado} onClick={props.logout} href="#/login" label="Sair"/>
             </ul>
         </div>
       </div>
@@ -32,4 +26,10 @@ function Navbar () {
     )
 }
 
-export default Navbar
+export default () => (
+    <AuthConsumer>
+        {(context) => (
+            <Navbar isUsuarioAutenticado={context.isAutenticado} logout={context.encerrarSessao} />
+        )}
+    </AuthConsumer>
+)
