@@ -1,6 +1,6 @@
 import React from 'react'
 
-function NavbarItem({ render, ...props }) {
+function NavbarItem({render, ...props}) {
 
     if(render) {
 

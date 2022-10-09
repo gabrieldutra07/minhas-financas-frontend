@@ -5,13 +5,13 @@ import Home from '../views/home'
 import Login from '../views/login'
 import ConsultaLancamentos from '../views/lancamentos/consultaLancamentos'
 import CadastroLancamentos from '../views/lancamentos/cadastroLancamento'
-import {AuthConsumer} from './provedorAutenticacao'
+import AuthService from '../app/service/authService'
 
 
-function RotaAutenticada({ component: Component, isUsuarioAutenticado, ...props }) {
+function RotaAutenticada({ component: Component, ...props }) {
     return (
         <Route {...props} render={(componentProps) => {
-            if(isUsuarioAutenticado) {
+            if(AuthService.isAuth()) {
                 return (
                     <Component {...componentProps} />
                 )
@@ -24,28 +24,22 @@ function RotaAutenticada({ component: Component, isUsuarioAutenticado, ...props 
     )
 }
 
-function Rotas (props) {
+function Rotas () {
 
     return (
         <HashRouter>
             <Switch>
                 <Route path="/login" component={Login} />
                 <Route path="/cadastro-usuarios" component={CadastroUsuario} />
-                <Route path="/" component={Home} />
                 
-                <RotaAutenticada isUsuarioAutenticado={props.isUsuarioAutenticado} path="/home" component={Home} />
-                <RotaAutenticada isUsuarioAutenticado={props.isUsuarioAutenticado} path="/consulta-lancamentos" component={ConsultaLancamentos} />
-                <RotaAutenticada isUsuarioAutenticado={props.isUsuarioAutenticado} path="/cadastro-lancamentos/:id?" component={CadastroLancamentos} />
+                <RotaAutenticada path="/home" component={Home} />
+                <RotaAutenticada path="/consulta-lancamentos" component={ConsultaLancamentos} />
+                <RotaAutenticada path="/cadastro-lancamentos/:id?" component={CadastroLancamentos} />
+                <RotaAutenticada path="/" component={Home} />
             </Switch>
         </HashRouter>
     )
 
 }
 
-export default () => (
-    <AuthConsumer>
-
-        {(context) => (<Rotas isUsuarioAutenticado={context.isAutenticado} />)}
-
-    </AuthConsumer>
-)
+export default Rotas

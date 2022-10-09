@@ -24,9 +24,10 @@ class Login extends React.Component {
             email: this.state.email,
             senha: this.state.senha
         }).then(res => {
-            //LocalStorageService.adicionarItem('_usuario_logado', res.data)
-            this.context.iniciarSessao(res.data)
+            LocalStorageService.adicionarItem('_usuario_logado', res.data)
+            //this.context.iniciarSessao(res.data)
             this.props.history.push('/home')
+            window.location.reload()
         }).catch(err => {
             mensagemErro(err.response.data)
         })
@@ -66,6 +67,6 @@ class Login extends React.Component {
     }
 }
 
-Login.contextType = AuthContext
+//Login.contextType = AuthContext
 
 export default withRouter(Login)
