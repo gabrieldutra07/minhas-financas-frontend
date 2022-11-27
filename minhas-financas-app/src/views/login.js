@@ -26,10 +26,11 @@ class Login extends React.Component {
         }).then(res => {
             LocalStorageService.adicionarItem('_usuario_logado', res.data)
             //this.context.iniciarSessao(res.data)
+            console.log("passou aqui")
             this.props.history.push('/home')
             window.location.reload()
         }).catch(err => {
-            mensagemErro(err.response.data)
+            console.log(err)
         })
     }   
 
